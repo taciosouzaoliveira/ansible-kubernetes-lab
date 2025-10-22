@@ -1,0 +1,6 @@
+# playbook.yml
+- name: Prepara configurações comuns em todos os nós
+  hosts: all
+  become: yes
+  roles:
+    - common

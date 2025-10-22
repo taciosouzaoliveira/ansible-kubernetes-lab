@@ -1,0 +1,9 @@
+# roles/common/handlers/main.yml
+
+- name: Aplicar sysctl
+  command: sysctl --system
+
+- name: Reiniciar containerd
+  systemd:
+    name: containerd
+    state: restarted

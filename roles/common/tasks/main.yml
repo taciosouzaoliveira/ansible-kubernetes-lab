@@ -1,0 +1,102 @@
+# roles/common/tasks/main.yml
+
+- name: TASK 1 - Desabilitar swap
+  command: swapoff -a
+
+- name: TASK 1 - Comentar swap no fstab para persistência
+  replace:
+    path: /etc/fstab
+    regexp: '^/swap.img'
+    replace: '#/swap.img'
+
+- name: TASK 2 & 3 - Carregar módulos do kernel e configurar sysctl
+  copy:
+    src: files/k8s.conf
+    dest: /etc/sysctl.d/k8s.conf
+  notify: Aplicar sysctl
+
+- name: TASK 4 - Instalar pacotes de pré-requisitos para os repositórios
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: yes
+
+- name: TASK 5 - Adicionar chave GPG do repositório Docker
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: TASK 6 - Adicionar repositório do Docker
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    state: present
+
+- name: TASK 7 - Adicionar chave GPG do repositório Kubernetes
+  apt_key:
+    url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+    state: present
+    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+- name: TASK 8 - Adicionar repositório do Kubernetes
+  apt_repository:
+    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /
+    state: present
+    filename: kubernetes
+
+- name: TASK 9 - Instalar containerd e pacotes do Kubernetes
+  apt:
+    name:
+      - containerd.io
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+    update_cache: yes
+
+- name: TASK 10 - Manter versões dos pacotes Kubernetes
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+# --- INÍCIO DO AJUSTE PARA O ERRO DO CONTAINerd ---
+
+- name: TASK 11 - Criar diretório para configuração do containerd
+  file:
+    path: /etc/containerd
+    state: directory
+
+- name: TASK 12 - Gerar arquivo de configuração padrão do containerd
+  command: containerd config default > /etc/containerd/config.toml
+  args:
+    creates: /etc/containerd/config.toml # Só executa se o arquivo não existir
+
+- name: TASK 13 - Habilitar SystemdCgroup no containerd
+  replace:
+    path: /etc/containerd/config.toml
+    regexp: 'SystemdCgroup = false'
+    replace: 'SystemdCgroup = true'
+  notify: Reiniciar containerd # Notifica o handler para reiniciar o serviço
+
+# --- FIM DO AJUSTE ---
+
+- name: TASK 14 - Habilitar kubelet
+  systemd:
+    name: kubelet
+    enabled: yes
+
+- name: Adicionar hosts para resolução de nomes
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item }}"
+  loop:
+    - "192.168.56.10 k8s-control-plane"
+    - "192.168.56.11 k8s-worker-1"
+    - "192.168.56.12 k8s-worker-2"

@@ -33,12 +33,12 @@ Para executar este laboratório, você precisa ter as seguintes ferramentas inst
 1.  **Clone o repositório:**
     ```bash
     git clone https://github.com/taciosouzaoliveira/ansible-kubernetes-lab
-    cd ansible-kubernetes-lab
+   
     ```
 
 2.  **Acesse o diretório da versão com Ansible:**
     ```bash
-    cd v2-ansible-kubernetes-lab
+    cd ansible-kubernetes-lab
     ```
 
 3.  **Inicie o ambiente:**
@@ -76,6 +76,3 @@ A evolução deste projeto foi impulsionada pela colaboração da comunidade. Ag
 * **Bruno dos Santos**, pela excelente sugestão de migrar a lógica de provisionamento para **Ansible**.
 * **Marcelo Baptista**, pela importante correção técnica de usar o termo padrão da indústria, **"Control Plane"**.
 
-## Licença
-
-Este projeto está sob a licença MIT.

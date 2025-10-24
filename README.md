@@ -4,6 +4,10 @@ Este repositório contém um ambiente de laboratório para estudos de Kubernetes
 
 O projeto demonstra a evolução de uma automação simples com Shell Script para uma solução de Infraestrutura como Código (IaC) robusta e profissional utilizando Ansible.
 
+<p align="center">
+  <img src="Crontrol Plane Imagem.png" alt="Arquitetura do Cluster Kubernetes" width="800">
+</p>
+
 ## Estrutura do Repositório
 
 Este projeto está dividido em duas versões, representando uma jornada de aprimoramento técnico:

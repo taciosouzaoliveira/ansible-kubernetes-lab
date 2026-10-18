@@ -1,0 +1,3 @@
+---
+# Minor do Kubernetes instalado pelo repositório pkgs.k8s.io (troque aqui para mudar de versão)
+k8s_version: "1.36"

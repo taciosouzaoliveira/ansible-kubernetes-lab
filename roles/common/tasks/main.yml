@@ -37,13 +37,13 @@
 
 - name: TASK 7 - Adicionar chave GPG do repositório Kubernetes
   apt_key:
-    url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+    url: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version }}/deb/Release.key
     state: present
     keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 - name: TASK 8 - Adicionar repositório do Kubernetes
   apt_repository:
-    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /
+    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_version }}/deb/ /
     state: present
     filename: kubernetes
 

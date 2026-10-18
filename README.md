@@ -10,7 +10,7 @@ O projeto demonstra a evolução de uma automação simples com Shell Script par
 
 ## Estrutura do Repositório
 
-Este projeto está dividido em duas versões, representando uma jornada de aprimoramento técnico:
+O repositório atual reúne o `Vagrantfile`, o inventário e os playbooks/roles Ansible na raiz. A migração de scripts shell para Ansible é o contexto histórico do projeto; os diretórios `v1-vagrant-shell-script/` e `v2-vagrant-ansible/` descritos abaixo não fazem parte da árvore atual.
 
 ### 1. `v1-vagrant-shell-script/`
 A abordagem inicial. Utiliza um `Vagrantfile` para criar as máquinas virtuais e um único `script.sh` para instalar e configurar todos os componentes.
@@ -68,7 +68,7 @@ Para executar este laboratório, você precisa ter as seguintes ferramentas inst
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
-    kubectl apply -f [https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml](https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml)
+    kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
     ```
 
 7.  **Junte os Worker Nodes ao cluster:**
